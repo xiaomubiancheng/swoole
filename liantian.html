@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+</head>
+<body>
+<div id="main" style="width: 600px; height: 200px; overflow: auto; border: solid 2px black;">
+</div>
+<textarea id="textarea"></textarea>
+<br />
+<input type="button" value="发送数据" onclick="send()" />
+<script type="text/javascript" src="./jquery.min.js"></script>
+<script type="text/javascript">
+    var name=prompt("请输入您的名字", "匿名者"); // 弹出input框
+    //创建websocket对象
+    var ws = new WebSocket("ws://47.96.150.184:8081");
+    //连接socket服务器成功，则触发回调函数
+    ws.onopen = function () {
+        console.log("连接成功");
+    }
+    //收到socket服务消息，则触发回调函数
+    ws.onmessage = function(event) {
+        var data = event.data;
+        // 处理数据
+        console.log("收到socket服务消息，内容：" + data);
+        $('#main').append("<p>"+data+"</p>");
+    };
+    function send() {
+        var data = document.getElementById('textarea').value;
+        ws.send(name + "：" + data);
+    }
+</script>
+</body>
+</html>
